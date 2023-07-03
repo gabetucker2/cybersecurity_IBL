@@ -15,7 +15,6 @@ train_data = pandas.read_csv(TRAINING_URL).values
 test_data = pandas.read_csv(TESTING_URL).values
 memory = pyactup.Memory(noise=NOISE)
 num_cols = len(train_data[0, :])
-testing_errors = 0
 
 INPUT_COL_IDXS = [i for i in range(num_cols) if i != OUTPUT_COL_IDX]
 
@@ -40,21 +39,42 @@ def encode_chunk(inputs, output):
 def decode_chunk(inputs):
     return (memory.retrieve(arrays_to_dict(inputs))).get(OUTPUT_NAME)
 
-def train(dataset):
-    for row_idx in range(len(dataset[:, 0])):
+def train(dataset, dataset_name):
 
-        training_inputs = train_data[row_idx, INPUT_COL_IDXS]
-        training_output = train_data[row_idx, OUTPUT_COL_IDX]
+    print(f"BEGINNING TRAINING THE {dataset_name} DATASET")
+
+    total_trials = len(dataset[:, 0])
+
+    for trials in range(total_trials):
+
+        training_inputs = train_data[trials, INPUT_COL_IDXS]
+        training_output = train_data[trials, OUTPUT_COL_IDX]
 
         encode_chunk(training_inputs, training_output)
+    
+    print(f"FINISHED TRAINING THE {dataset_name} DATASET")
 
-def test(dataset):
-    for row_idx in range(len(dataset[:, 0])):
+def test(dataset, dataset_name):
 
-        testing_inputs = test_data[row_idx, INPUT_COL_IDXS]
-        testing_actual = test_data[row_idx, OUTPUT_COL_IDX]
+    print(f"BEGINNING TESTING THE {dataset_name} DATASET")
+
+    trial_errors = 0
+    total_trials = len(dataset[:, 0])
+
+    for trials in range(total_trials):
+
+        testing_inputs = test_data[trials, INPUT_COL_IDXS]
+        testing_actual = test_data[trials, OUTPUT_COL_IDX]
         testing_predicted = decode_chunk(testing_inputs)
 
+        trial_errors += testing_actual == testing_predicted
+    
+    error_probability = trial_errors / total_trials
+    
+    print(f"Accuracy: {(error_probability * 100)}%")
+    print(f"FINISHED TESTING THE {dataset_name} DATASET")
+
+
 # MAIN ROUTINE
-# train(train_data)
-# test(test_data)
+train(train_data, "training")
+test(test_data, "testing")
