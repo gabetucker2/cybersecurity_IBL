@@ -18,9 +18,22 @@ big_train_data = pandas.read_csv(BIG_TRAINING_URL, header=None).values
 test_data = pandas.read_csv(TESTING_URL, header=None).values
 memory = pyactup.Memory(noise=MEMORY_NOISE)
 
+target_names = []
+
 INPUT_COL_IDXS = [i for i in range(len(small_train_data[0, :])) if i != OUTPUT_COL_IDX]
 
 # FUNCTIONS
+def get_percent(probability):
+    return str(round(probability * 100, 2)) + '%'
+
+def get_target_idx(target_name):
+    global target_names
+    if target_name in target_names:
+        return target_names.index(target_name)
+    else:
+        target_names = target_names + [target_name]
+        return len(target_names) - 1
+
 def encode_chunk(inputs, output):
 
     data_to_encode = {}
@@ -28,10 +41,9 @@ def encode_chunk(inputs, output):
     for i in range(len(inputs)):
         data_to_encode[f'{i}'] = inputs[i]
     
-    data_to_encode[OUTPUT_NAME] = output
+    data_to_encode[OUTPUT_NAME] = get_target_idx(output) # str to float
 
-    memory.learn(data_to_encode)
-    memory.advance()
+    memory.learn(data_to_encode, advance=1)
 
 def decode_chunk(inputs):
 
@@ -40,7 +52,9 @@ def decode_chunk(inputs):
     for i in range(len(inputs)):
         data_to_decode[f'{i}'] = inputs[i]
 
-    return (memory.retrieve(data_to_decode) or {}).get(OUTPUT_NAME)
+    prediction = memory.blend(OUTPUT_NAME, data_to_decode) # figure out why this isn't working, push to new branch
+
+    return prediction
 
 def train(dataset, dataset_name, trial_probability):
 
@@ -64,7 +78,7 @@ def train(dataset, dataset_name, trial_probability):
 
             processed_trials += 1
     
-    print(f"FINISHED TRAINING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS")
+    print(f"FINISHED TRAINING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS ({get_percent(trial_probability)})")
 
 def test(dataset, dataset_name, trial_probability):
 
@@ -87,6 +101,7 @@ def test(dataset, dataset_name, trial_probability):
             testing_predicted = decode_chunk(testing_inputs)
 
             trial_errors += testing_actual == testing_predicted
+            print(f"Predicted: {testing_predicted}; actual: {testing_actual}; error? {testing_actual!=testing_predicted}")
             processed_trials += 1
     
     if processed_trials == 0:
@@ -94,12 +109,12 @@ def test(dataset, dataset_name, trial_probability):
     else:
         error_probability = trial_errors / processed_trials
     
-    print(f"Accuracy: {(error_probability * 100)}%")
-    print(f"FINISHED TESTING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS")
+    print(f"Accuracy: {get_percent(error_probability)}")
+    print(f"FINISHED TESTING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS ({get_percent(trial_probability)}) WITH {get_percent(MEMORY_NOISE)} NOISE")
 
 
 # TRAIN
 train(big_train_data, "big train", 1)
 
 # TEST
-test(test_data, "test", 0.05)
+test(test_data, "test", 0.01)
