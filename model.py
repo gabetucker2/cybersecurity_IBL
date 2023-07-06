@@ -105,7 +105,7 @@ def train_learn(new_dataset, dataset_name):
 def train(dataset, dataset_name, multiplier):
     
     # get new dataset stochastically based on target counts
-    new_dataset = train_populate(dataset_name, dataset_name, multiplier)
+    new_dataset = train_populate(dataset, dataset_name, multiplier)
 
     # train using new dataset from stochastic targets
     train_learn(new_dataset, dataset_name)
