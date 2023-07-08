@@ -178,4 +178,4 @@ def test(dataset, trial_probability, decode_function):
 train(big_train_data, -1)
 
 # TEST
-test(test_data, 0.01, decode_chunk_best_blend)
+test(big_train_data, 0.01, decode_chunk_retrieval_partial)
