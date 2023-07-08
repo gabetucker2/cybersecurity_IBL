@@ -8,7 +8,7 @@ The current state of the project is the following:
 
 * Training is presumably fine (because retrieval has hits)
 * Retrieval:
-    * No differences between partial and strict matching
+    * No differences between partial and strict matching (not good)
     * Retrieval with no partial matching is fine:
         * When the model is trained on the entire training set (1~4% accuracy range, as expected)
         * When the model is trained on a subset of the training set (0% accuracy, as expected)
