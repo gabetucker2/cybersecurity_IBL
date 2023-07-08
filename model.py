@@ -30,16 +30,19 @@ def get_variable_name_as_string(var):
     callers_local_vars = inspect.currentframe().f_back.f_back.f_locals.items()
     return [var_name for var_name, var_val in callers_local_vars if var_val is var]
 
+def array_to_dictionary(arr):
+    return {str(i): value for i, value in enumerate(arr)}
+
 def encode_chunk(inputs, output):
 
-    data_to_encode = {str(i): value for i, value in enumerate(inputs)}
+    data_to_encode = array_to_dictionary(inputs)
     data_to_encode[OUTPUT_NAME] = output
 
     memory.learn(data_to_encode, advance=1)
 
 def decode_chunk_best_blend(inputs):
 
-    data_to_decode = {str(i): value for i, value in enumerate(inputs)}
+    data_to_decode = array_to_dictionary(inputs)
 
     prediction, _ = memory.best_blend(OUTPUT_NAME, [data_to_decode])
 
@@ -47,7 +50,7 @@ def decode_chunk_best_blend(inputs):
 
 def decode_chunk_retrieval_no_partial(inputs):
 
-    data_to_decode = {str(i): value for i, value in enumerate(inputs)}
+    data_to_decode = array_to_dictionary(inputs)
 
     prediction = (memory.retrieve(data_to_decode, partial=False) or {}).get(OUTPUT_NAME)
 
@@ -55,7 +58,7 @@ def decode_chunk_retrieval_no_partial(inputs):
 
 def decode_chunk_retrieval_partial(inputs):
 
-    data_to_decode = {str(i): value for i, value in enumerate(inputs)}
+    data_to_decode = array_to_dictionary(inputs)
 
     prediction = (memory.retrieve(data_to_decode, partial=True) or {}).get(OUTPUT_NAME)
 
@@ -178,4 +181,4 @@ def test(dataset, trial_probability, decode_function):
 train(big_train_data, -1)
 
 # TEST
-test(big_train_data, 0.01, decode_chunk_retrieval_partial)
+test(test_data, 0.01, decode_chunk_retrieval_partial)
