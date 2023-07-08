@@ -1,0 +1,40 @@
+partial matchung
+
+mismatch penalty
+
+the similarity penalty itself
+
+look into retrieval threshold
+
+3 cases
+numeric output - you don't want this version
+output is a chunk
+chunks with similarities between them, combination
+
+Send Don an email, CC Lebiere
+
+use similarity function, numer-similarities
+
+temp parameter is 1.0 for blending
+
+he thinks blend is numerical, best-blend is symbolic
+
+order of magnitude categorical frequency diff
+
+Ensure 10 instances of each of 9 intrusion, 90 for normal, pre-store different instances
+
+even with 1 1 1 1 1 1 1 1 1 1 9 works with some accuracy
+
+There's also code he wrote that only adds instances  that it CANNOT predict accurately already
+
+Rob did multidimensionality visualization to show some categories are not separable
+
+DL model can get fine-tuned details between the ones that are close
+
+He has correlation matrix
+
+Talk with Rob about connecting direcftly to DL model
+
+Reason for blending is we don't depend on the closest match being the right match
+
+Only correct for explicitly trained instances
