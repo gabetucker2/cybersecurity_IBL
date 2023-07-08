@@ -3,6 +3,7 @@ import pyactup
 import pandas
 import random
 import numpy
+import time
 
 # PARAMETERS
 SMALL_TRAINING_URL = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/Small%20Training%20Set.csv"
@@ -19,18 +20,11 @@ big_train_data = pandas.read_csv(BIG_TRAINING_URL, header=None).values
 test_data = pandas.read_csv(TESTING_URL, header=None).values
 memory = pyactup.Memory(noise=MEMORY_NOISE)
 
-target_names = []
-
 INPUT_COL_IDXS = [i for i in range(len(small_train_data[0, :])) if i != OUTPUT_COL_IDX]
 
 # FUNCTIONS
 def get_percent(probability):
-    return str(round(probability * 100, 2)) + '%'
-
-def get_target_idx(target_name):
-    global target_names
-    if target_name not in target_names:
-        target_names.append(target_name)
+    return str(round(probability * 100, 2)) + '%'\
 
 def encode_chunk(inputs, output):
 
@@ -48,40 +42,60 @@ def decode_chunk(inputs):
 
     return prediction
 
-def train_populate(original_dataset, dataset_name, multiplier, num_targets):
+# if threats_per_type is -1, fill to max capacity to save time
+def train_populate_normal_half(original_dataset, dataset_name, threats_per_type):
 
     print(f"BEGINNING POPULATING THE `{dataset_name}` DATASET WITH PROPORTIONATE THREAT TYPES")
-    
-    # num_targets = {'val1': 3, 'val2': 3, "normal": 6}
-    num_targets = {}
-    for name in target_names:
-        num_targets[name] = 0
-    total_trials = len(original_dataset[:, 0])
-    for trial in range(total_trials):
-        num_targets[original_dataset[trial, OUTPUT_COL_IDX]] += 1
-    num_targets["normal"] = 0
-    num_targets["normal"] = sum(num_targets.values())
 
-    # selected_targets = {'val1': [0, 5, 9], 'val2': [2, 3, 6], 'normal': [0, 4, 6, 7, 9, 10]}
-    num_threat_types = len(target_names) - 1 # other than normal
-    selected_targets = {
-        key: random.sample(range(min(value, multiplier)), min(value, multiplier))
-        for key, value in num_targets.items()
-    }
+    if threats_per_type == -1:
+        return original_dataset
+    else:
+        print("CP A")
+        
+        # num_targets = {'val1': 0, 'val2': 0, "normal": 0}
+        num_targets = {}
+        for target_name in original_dataset[:, OUTPUT_COL_IDX]:
+            num_targets[target_name] = 0
+        # print(f"num_targets = {num_targets}")
+        print("CP B")
 
-    # new_dataset = original_dataset WITHOUT ROWS NOT IN SELECTED_TARGETS
-    new_dataset = numpy.empty((sum(num_targets.values()), len(INPUT_COL_IDXS)+1))
+        # num_targets = {'val1': 4234, 'val2': 14, "normal": 532234}
+        num_threat_types = len(num_targets.keys()) - 1 # other than normal
+        total_trials = len(original_dataset[:, 0])
+        for trial in range(total_trials):
+            num_targets[original_dataset[trial, OUTPUT_COL_IDX]] += 1
+        # print(f"num_targets = {num_targets}")
+        print("CP C")
 
-    # num_targets = {'val1': 0, 'val2': 0, "normal": 0}
-    for key, _ in num_targets.items():
-        num_targets[key] = 0
+        # selected_targets = {'val1': [0, 5, 9], 'val2': [2, 3, 6], 'normal': [0, 4, 6, 7, 9, 10]}
+        def return_expected_threats(key, threats_per_type):
+            out = threats_per_type
+            if key == 'normal':
+                out *= num_threat_types
+            return out
+        selected_targets = {
+            key: random.sample(range(value), k = min(value, return_expected_threats(key, threats_per_type)))
+            for key, value in num_targets.items()
+        }
+        # print(f"selected_targets = {selected_targets}")
+        print("CP D")
 
-    # populate new_dataset
-    for trial in range(total_trials):
-        training_output = original_dataset[trial, OUTPUT_COL_IDX]
-        if num_targets[training_output] in selected_targets[training_output]:
-            # add row to new_dataset if the current originaldataset row is in the chosen distribution
-        num_targets[training_output] += 1
+        # new_dataset = original_dataset WITHOUT ROWS NOT IN SELECTED_TARGETS
+        new_dataset = numpy.empty((0, len(INPUT_COL_IDXS)+1))
+
+        # num_targets = {'val1': 0, 'val2': 0, "normal": 0}
+        for key, _ in num_targets.items():
+            num_targets[key] = 0
+        print("CP E")
+
+        # populate new_dataset
+        for trial in range(total_trials):
+            training_output = original_dataset[trial, OUTPUT_COL_IDX]
+            if num_targets[training_output] in selected_targets[training_output]:
+                new_dataset = numpy.append(new_dataset, [original_dataset[trial, :]], axis=0)
+            num_targets[training_output] += 1
+        # print(f"new_dataset shape = {new_dataset.shape}, original_dataset shape = {original_dataset.shape}")
+        print("CP F")
 
     print(f"FINISHED POPULATING THE `{dataset_name}` DATASET WITH PROPORTIONATE THREAT TYPES")
 
@@ -102,10 +116,10 @@ def train_learn(new_dataset, dataset_name):
 
     print(f"FINISHED TRAINING THE `{dataset_name}` DATASET")
 
-def train(dataset, dataset_name, multiplier):
+def train(dataset, dataset_name, threats_per_type):
     
     # get new dataset stochastically based on target counts
-    new_dataset = train_populate(dataset, dataset_name, multiplier)
+    new_dataset = train_populate_normal_half(dataset, dataset_name, threats_per_type)
 
     # train using new dataset from stochastic targets
     train_learn(new_dataset, dataset_name)
@@ -144,7 +158,7 @@ def test(dataset, dataset_name, trial_probability):
 
 
 # TRAIN
-train(big_train_data, "big train", 1)
+train(big_train_data, "big train", -1)
 
 # TEST
 test(test_data, "test", 0.01)
