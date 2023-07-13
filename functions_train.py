@@ -4,7 +4,6 @@ import random
 
 # SCRIPTS
 import parameters
-import functions_helper
 import functions_encode
 
 # FUNCTIONS

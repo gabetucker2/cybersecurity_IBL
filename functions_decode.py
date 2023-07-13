@@ -6,7 +6,7 @@ def decode_chunk_retrieval_strict(inputs):
 
     data_to_decode = functions_helper.array_to_dictionary(inputs)
 
-    prediction = (parameters.memory.retrieve(data_to_decode, partial=False) or {}).get(OUTPUT_NAME)
+    prediction = (parameters.memory.retrieve(data_to_decode, partial=False) or {}).get(parameters.OUTPUT_NAME)
 
     return prediction
 
