@@ -133,7 +133,7 @@ reinforcements of a chunk to be used to compute the base-level activation in the
 of any older than those approximated using a formula similar to the preceding.
 
 Note that setting the ``decay`` parameter to ``None`` disables the computation of base-level
-activation. That is, the base-level component of the total activation is zero in this case.
+activation. That is, the base-level component OF TOTAL TRIALS activation is zero in this case.
 
 Activation noise
 ~~~~~~~~~~~~~~~~
