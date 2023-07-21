@@ -12,7 +12,7 @@ def similarity(x, y):
     elif isinstance(x, (float, int)) and isinstance(y, (float, int)):
         # Similarity computation for float or integer values
         if y < x:
-            return f(y, x)
+            return similarity(y, x)
         return 1 - (y - x) / y
     else:
         return 0.0  # Default similarity for incompatible types
