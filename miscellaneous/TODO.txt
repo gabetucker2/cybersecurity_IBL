@@ -1,3 +1,8 @@
+MAIN TODO:
+* Data reduction
+
+MISC:
+
 partial matchung
 
 mismatch penalty

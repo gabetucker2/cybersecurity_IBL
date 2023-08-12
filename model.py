@@ -9,7 +9,12 @@ import functions_decode
 
 # MAIN
 
+dataset = datasets.dataset_USNW_NB15
+
 time.sleep(0.1) # allows other scripts to initialize before starting
 
-functions_train.train(datasets.dataset_NSL, 6)
-functions_test.test(datasets.dataset_NSL, 0.02, functions_decode.decode_chunk_blend)
+functions_train.train(dataset, 6)
+
+time.sleep(1) # allows you to process training data
+
+functions_test.test(dataset, 0.1, functions_decode.decode_chunk_blend)

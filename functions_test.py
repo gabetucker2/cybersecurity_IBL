@@ -38,4 +38,3 @@ def test(dataset, trial_probability, decode_function):
     
     print(f"Accuracy: {functions_helper.get_percent(error_probability)}")
     print(f"FINISHED TESTING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS ({functions_helper.get_percent(trial_probability)} OF TOTAL TRIALS) WITH {functions_helper.get_percent(parameters.MEMORY_NOISE)} NOISE")
-    print(dataset_name)
