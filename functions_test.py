@@ -5,13 +5,15 @@ import random
 import parameters
 import functions_helper
 
-def test(dataset, dataset_name, trial_probability, decode_function):
+def test(dataset, trial_probability, decode_function):
+
+    dataset_name = dataset["name"]
 
     print(f"BEGINNING TESTING THE `{dataset_name}` DATASET")
 
     trial_errors = 0
     processed_trials = 0
-    total_trials = len(dataset[:, 0])
+    total_trials = len(dataset["test"][:, 0])
     print_interval = [(i+1) * (total_trials // 10) for i in range(10)]
 
     for trial in range(total_trials):
@@ -21,8 +23,8 @@ def test(dataset, dataset_name, trial_probability, decode_function):
 
         if trial_probability > random.random():
 
-            testing_inputs = dataset[trial, parameters.INPUT_COL_IDXS]
-            testing_actual = dataset[trial, parameters.OUTPUT_COL_IDX]
+            testing_inputs = dataset["test"][trial, dataset["input_idxs"]]
+            testing_actual = dataset["test"][trial, dataset["output_idx"]]
             testing_predicted = decode_function(testing_inputs)
 
             trial_errors += testing_actual == testing_predicted

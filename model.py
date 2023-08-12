@@ -1,13 +1,15 @@
+# LIBRARIES
+import time
+
 # SCRIPTS
-import parameters
+import datasets
 import functions_train
 import functions_test
 import functions_decode
 
-##############################################################
+# MAIN
 
-# MAIN ROUTINE
-functions_train.train(parameters.big_train_data, "big_train_data", 6)
-functions_test.test(parameters.test_data, "test_data", 0.02, functions_decode.decode_chunk_blend)
+time.sleep(0.1) # allows other scripts to initialize before starting
 
-##############################################################
+functions_train.train(datasets.dataset_NSL, 6)
+functions_test.test(datasets.dataset_NSL, 0.02, functions_decode.decode_chunk_blend)
