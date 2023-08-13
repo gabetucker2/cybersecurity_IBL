@@ -13,16 +13,19 @@ dataset_NSL_KDD = {
 
 dataset_USNW_NB15 = {
     "name" : "USNW_NB15",
-    "output_idx" : -1,
-    "exclude_idxs" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    "train" : numpy.random.permutation(pandas.read_csv("./data/usnw_nb15/train.csv").values),
-    "test" : numpy.random.permutation(pandas.read_csv("./data/usnw_nb15/test.csv").values)
+    "output_idx" : -2,
+    "exclude_idxs" : [],
+    "train" : pandas.read_csv("./data/usnw_nb15/train.csv").values,
+    "test" : pandas.read_csv("./data/usnw_nb15/test.csv").values
 }
 
 datasets = [dataset_NSL_KDD, dataset_USNW_NB15]
 
 # PROCEDURAL DATA
 for dataset in datasets:
+    # randomize row orders
+    dataset["train"] = numpy.random.permutation(dataset["train"])
+    dataset["test"] = numpy.random.permutation(dataset["test"])
     # normalize output idxs
     if dataset["output_idx"] < 0:
         dataset["output_idx"] = len(dataset["train"][0, :]) + dataset["output_idx"]

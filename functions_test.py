@@ -36,5 +36,12 @@ def test(dataset, trial_probability, decode_function):
     else:
         error_probability = trial_errors / processed_trials
     
+    # get target types for printing purposes
+    target_kinds = {}
+    for target_name in dataset["train"][:, dataset["output_idx"]]:
+        target_kinds[target_name] = 0
+    
     print(f"Accuracy: {functions_helper.get_percent(error_probability)}")
-    print(f"FINISHED TESTING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS ({functions_helper.get_percent(trial_probability)} OF TOTAL TRIALS) WITH {functions_helper.get_percent(parameters.MEMORY_NOISE)} NOISE")
+    print(f"FINISHED TESTING THE `{dataset_name}` DATASET WITH {processed_trials} TRIALS ({functions_helper.get_percent(trial_probability)} OF TOTAL TRIALS) WITH {functions_helper.get_percent(parameters.MEMORY_NOISE)} NOISE AND `{len(target_kinds.keys())}` `{parameters.OUTPUT_NAME}` KINDS")
+
+    return error_probability

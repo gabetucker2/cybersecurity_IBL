@@ -2,19 +2,23 @@
 import time
 
 # SCRIPTS
-import datasets
+import parameters
 import functions_train
 import functions_test
-import functions_decode
+import functions_helper
 
 # MAIN
 
-dataset = datasets.dataset_USNW_NB15
-
 time.sleep(0.1) # allows other scripts to initialize before starting
 
-functions_train.train(dataset, 6)
+accuracy_sum = 0
 
-time.sleep(1) # allows you to process training data
+for i in range(parameters.EPOCHS):
 
-functions_test.test(dataset, 0.1, functions_decode.decode_chunk_blend)
+    functions_train.train(parameters.DATASET, parameters.THREATS_PER_TYPE)
+
+    accuracy_sum += functions_test.test(parameters.DATASET, parameters.PROBABILITY_TEST, parameters.DECODE_FUNCTION)
+
+    time.sleep(parameters.READ_TIME)
+
+print(f"MEAN {functions_helper.get_percent(accuracy_sum/parameters.EPOCHS)}% ACCURACY ACROSS {parameters.EPOCHS} EPOCHS")

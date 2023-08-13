@@ -3,6 +3,7 @@ import numpy
 import random
 
 # SCRIPTS
+import parameters
 import functions_encode
 
 # FUNCTIONS
@@ -50,7 +51,7 @@ def train_populate_normal_half(original_dataset, threats_per_type):
 
     # new_dataset = data_train WITHOUT ROWS NOT IN SELECTED_TARGETS
     new_dataset = original_dataset
-    new_dataset["train"] = numpy.empty((0, len(original_dataset["input_idxs"])+1))
+    new_dataset["train"] = numpy.empty((0, original_dataset["train"].shape[1]))
 
     # num_targets = {'val1': 0, 'val2': 0, "normal": 0}
     for key, _ in num_targets.items():
@@ -73,8 +74,9 @@ def train_learn(new_dataset):
     
     print(f"BEGINNING TRAINING THE `{dataset_name}` DATASET")
     
+    # encode chunks
     total_trials = len(new_dataset["train"][:, 0])
-    
+
     for trial in range(total_trials):
 
         training_inputs = new_dataset["train"][trial, new_dataset["input_idxs"]]
