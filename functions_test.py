@@ -25,6 +25,8 @@ def test(dataset, trial_probability, decode_function):
 
             testing_inputs = dataset["test"][trial, dataset["input_idxs"]]
             testing_actual = dataset["test"][trial, dataset["output_idx"]]
+            if parameters.BINARY:
+                testing_actual = testing_actual == dataset["binary_target"]
             testing_predicted = decode_function(testing_inputs)
 
             trial_errors += testing_actual == testing_predicted

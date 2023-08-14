@@ -81,6 +81,8 @@ def train_learn(new_dataset):
 
         training_inputs = new_dataset["train"][trial, new_dataset["input_idxs"]]
         training_output = new_dataset["train"][trial, new_dataset["output_idx"]]
+        if parameters.BINARY:
+            training_output = training_output == new_dataset["binary_target"]
 
         functions_encode.encode_chunk(training_inputs, training_output)
 

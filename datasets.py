@@ -7,6 +7,7 @@ dataset_NSL_KDD = {
     "name" : "NSL_KDD",
     "output_idx" : -2,
     "exclude_idxs" : [],
+    "binary_target" : "normal",
     "train" : pandas.read_csv("./data/nsl_kdd/train.csv", header=None).values,
     "test" : pandas.read_csv("./data/nsl_kdd/test.csv", header=None).values
 }
@@ -15,6 +16,7 @@ dataset_USNW_NB15 = {
     "name" : "USNW_NB15",
     "output_idx" : -2,
     "exclude_idxs" : [],
+    "binary_target" : "Normal",
     "train" : pandas.read_csv("./data/usnw_nb15/train.csv").values,
     "test" : pandas.read_csv("./data/usnw_nb15/test.csv").values
 }

@@ -21,4 +21,4 @@ for i in range(parameters.EPOCHS):
 
     time.sleep(parameters.READ_TIME)
 
-print(f"MEAN {functions_helper.get_percent(accuracy_sum/parameters.EPOCHS)}% ACCURACY ACROSS {parameters.EPOCHS} EPOCHS")
+print(f"MEAN {functions_helper.get_percent(accuracy_sum/parameters.EPOCHS)} ACCURACY ACROSS {parameters.EPOCHS} EPOCHS")
