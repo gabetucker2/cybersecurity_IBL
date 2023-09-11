@@ -2,8 +2,8 @@
 import pyactup
 
 # SCRIPTS
-import functions_decode
 import datasets
+import functions_decode
 
 # STATIC
 DATASET = datasets.dataset_USNW_NB15
