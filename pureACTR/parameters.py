@@ -17,10 +17,10 @@ DECODE_FUNCTION = functions_decode.decode_chunk_retrieval_partial
 EPOCHS = 10
 
 THREATS_PER_TYPE = 1 # -1 means all training data
-PROBABILITY_TEST = 0.01
+PROBABILITY_TEST = 0.00025
 
 READ_TRAIN_TIME = 0
-READ_TEST_TIME = 1
+READ_TEST_TIME = 0
 
 # PROCEDURAL
 memory = pyactup.Memory(noise=MEMORY_NOISE)

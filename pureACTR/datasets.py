@@ -24,24 +24,3 @@ dataset_USNW_NB15 = {
 }
 
 datasets = [dataset_NSL_KDD, dataset_USNW_NB15]
-
-# PRE-PROCESSING
-for dataset in datasets:
-    # randomize order
-    dataset["train"] = dataset["train"].sample(frac=1).reset_index(drop=True)
-    dataset["test"] = dataset["test"].sample(frac=1).reset_index(drop=True)
-    
-    # fix the output_idx in case it's negative
-    if dataset["output_idx"] < 0:
-        dataset["output_idx"] = dataset["train"].shape[1] + dataset["output_idx"]
-    
-    # make new datasets for increased accessibility without having to index or column sample
-    dataset["train_outputs"] = dataset["train"].iloc[:, [dataset["output_idx"]]]
-    dataset["test_outputs"] = dataset["test"].iloc[:, [dataset["output_idx"]]]
-
-    dataset["train_inputs"] = dataset["train"].drop(columns=dataset["train"].columns[dataset["exclude_idxs"]])
-    dataset["test_inputs"] = dataset["test"].drop(columns=dataset["test"].columns[dataset["exclude_idxs"]])
-
-    dataset["combined"] = pandas.concat([dataset["train"], dataset["test"]], ignore_index=True)
-    dataset["combined_inputs"] = pandas.concat([dataset["train_inputs"], dataset["test_inputs"]], ignore_index=True)
-    dataset["combined_outputs"] = pandas.concat([dataset["train_outputs"], dataset["test_outputs"]], ignore_index=True)
