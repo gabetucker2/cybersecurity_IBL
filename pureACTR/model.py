@@ -19,7 +19,7 @@ accuracy_sum = 0
 for i in range(parameters.EPOCHS):
 
     functions_preprocessing.preprocess_each_epoch()
-
+    
     functions_train.train(parameters.DATASET)
 
     time.sleep(parameters.READ_TRAIN_TIME)
