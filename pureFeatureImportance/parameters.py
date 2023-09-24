@@ -5,7 +5,7 @@ import functions_classBased
 
 # STATIC
 DATASET = datasets.dataset_USNW_NB15
-ANALYSIS_FUNCTION = functions_modelBased.randomForest
+ANALYSIS_FUNCTION = functions_classBased.selectKBest
 OUTPUT_NAME = "importanceGraph"
 
 OUTPUT_FOLDER = "graphs"
