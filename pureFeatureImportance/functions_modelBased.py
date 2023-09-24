@@ -15,7 +15,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 # SCRIPTS
 import parameters
 
-def selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_names):
+def modelBased_selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_names):
 
     # Load data
     df = parameters.DATASET["combined_inputs"]
@@ -59,7 +59,7 @@ def selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_nam
 
     return df_scores, df_col
     
-def randomForest(X_train, X_test, y_train, y_test, model_performance, feature_names):
+def modelBased_randomForest(X_train, X_test, y_train, y_test, model_performance, feature_names):
     start = time.time()
     model = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=0, bootstrap=True).fit(X_train, y_train)
     end_train = time.time()
