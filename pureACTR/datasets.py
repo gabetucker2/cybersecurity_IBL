@@ -21,6 +21,8 @@ dataset_USNW_NB15 = {
     "binary_target" : "Normal",
     "train" : pandas.read_csv("../data/usnw_nb15/train.csv"),
     "test" : pandas.read_csv("../data/usnw_nb15/test.csv")
+
+    
 }
 
 datasets = [dataset_NSL_KDD, dataset_USNW_NB15]

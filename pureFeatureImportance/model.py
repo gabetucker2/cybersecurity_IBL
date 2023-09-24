@@ -23,7 +23,8 @@ warnings.filterwarnings("ignore") # ignore redundant warnings
 
 print(f"RUNNING `{parameters.ANALYSIS_FUNCTION.__name__}` FUNCTION")
 
-df_scores, df_col = parameters.ANALYSIS_FUNCTION() # call main function
+X_train, X_test, y_train, y_test, model_performance, feature_names = functions_helper.getAnalysisInputs()
+df_scores, df_col = parameters.ANALYSIS_FUNCTION(X_train, X_test, y_train, y_test, model_performance, feature_names) # call main function
 
 print(f"FINISHED `{parameters.ANALYSIS_FUNCTION.__name__}` FUNCTION")
 

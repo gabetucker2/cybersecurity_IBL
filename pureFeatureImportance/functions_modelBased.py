@@ -11,11 +11,13 @@ import os
 from sklearn.feature_selection import SelectKBest, chi2
 import plotly.offline as pyo
 import time
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 
 # SCRIPTS
 import parameters
 
-def default():
+def selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_names):
     # Configure display options
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', 500)
@@ -75,3 +77,24 @@ def default():
 
     return df_scores, df_col
     
+def randomForest(X_train, X_test, y_train, y_test, model_performance, feature_names):
+    start = time.time()
+    model = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=0, bootstrap=True).fit(X_train, y_train)
+    end_train = time.time()
+    y_predictions = model.predict(X_test) # These are the predictions from the test data.
+    end_predict = time.time()
+    
+    accuracy = accuracy_score(y_test, y_predictions)
+    recall = recall_score(y_test, y_predictions, average='weighted')
+    precision = precision_score(y_test, y_predictions, average='weighted')
+    f1s = f1_score(y_test, y_predictions, average='weighted')
+
+    model_performance.loc['Random Forest'] = [accuracy, recall, precision, f1s, end_train-start, end_predict-end_train, end_predict-start]
+
+    # Instead of plotting, we'll prepare the scores and columns for output.
+    feat_importances = pd.Series(model.feature_importances_, index=feature_names)
+    
+    df_scores = pd.DataFrame(feat_importances.values)
+    df_col = pd.DataFrame(feat_importances.index)
+
+    return df_scores, df_col
