@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
+import plotly.io as pio
+import plotly.express as px
 import numpy as np
 
 # SCRIPTS
@@ -44,6 +46,23 @@ def getOutputName():
     return f"/{parameters.OUTPUT_FOLDER}/{parameters.OUTPUT_NAME}_{parameters.DATASET['name']}.html"
 
 def plotFeatures(df_scores, df_col):
+    
+    # Configure display options
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.expand_frame_repr', False)
+
+    # Configure plotly templates
+    pio.templates["ck_template"] = go.layout.Template(
+        layout_colorway=px.colors.sequential.Viridis,
+        layout_autosize=False,
+        layout_width=800,
+        layout_height=600,
+        layout_font=dict(family="Calibri Light"),
+        layout_title_font=dict(family="Calibri"),
+        layout_hoverlabel_font=dict(family="Calibri Light"),
+    )
+    pio.templates.default = 'ck_template+gridon'
 
     feature_score=pd.concat([df_col,df_scores],axis=1)
     feature_score.columns=['feature','score']

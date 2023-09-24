@@ -2,11 +2,9 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.io as pio
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
-import plotly.express as px
 import os
 from sklearn.feature_selection import SelectKBest, chi2
 import plotly.offline as pyo
@@ -18,22 +16,6 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 import parameters
 
 def selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_names):
-    # Configure display options
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', 500)
-    pd.set_option('display.expand_frame_repr', False)
-
-    # Configure plotly templates
-    pio.templates["ck_template"] = go.layout.Template(
-        layout_colorway=px.colors.sequential.Viridis,
-        layout_autosize=False,
-        layout_width=800,
-        layout_height=600,
-        layout_font=dict(family="Calibri Light"),
-        layout_title_font=dict(family="Calibri"),
-        layout_hoverlabel_font=dict(family="Calibri Light"),
-    )
-    pio.templates.default = 'ck_template+gridon'
 
     # Load data
     df = parameters.DATASET["combined_inputs"]
