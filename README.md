@@ -6,7 +6,7 @@ Completed:
 * Get pyactup working, replicating Dr. Lebiere's LISP results, with modular structure (100% done, has all options needed)
 * Get feature importance analysis working, with modular structure (100% done, has all options needed including model-based and class-based)
 
-TODO:
+**TODO:**
 PART 1:
 * Make pyactup code clearer (e.g., no need for "train_dict", use the pandas procedural datasets from the preprocessing script instead, have uniform preprocessed datasets, potentially have an original preprocessed and an epoch-wise preprocessed dataset that draws from the original?)
 * Make pureFeatureImportance code cleaner, e.g., no unnecessary parameters for selectKBest, better organized/notated and more consistent functions, etc
