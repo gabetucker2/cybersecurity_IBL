@@ -16,7 +16,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 # SCRIPTS
 import parameters
 
-def classBased_selectKBest(X_train, X_test, y_train, y_test, model_performance, feature_names):
+def classBased_selectKBest():
 
     # Load data
     df = parameters.DATASET["combined_inputs"]

@@ -23,8 +23,7 @@ if parameters.RUN_FEATURE_IMPORTANCE:
 
     print(f"RUNNING `{parameters.ANALYSIS_FUNCTION.__name__}` FUNCTION")
 
-    X_train, X_test, y_train, y_test, model_performance, feature_names = functions_helper.getAnalysisInputs()
-    df_scores, df_col = parameters.ANALYSIS_FUNCTION(X_train, X_test, y_train, y_test, model_performance, feature_names) # call main function
+    df_scores, df_col = parameters.ANALYSIS_FUNCTION() # call main function
 
     print(f"FINISHED `{parameters.ANALYSIS_FUNCTION.__name__}` FUNCTION")
 
