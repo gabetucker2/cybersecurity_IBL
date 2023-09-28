@@ -30,7 +30,6 @@ READ_TEST_TIME = 0
 RUN_FEATURE_IMPORTANCE = True
 
 ANALYSIS_FUNCTION = functions_classBased.classBased_selectKBest
-OUTPUT_NAME = "importanceGraph"
 
 OUTPUT_FOLDER = "graphs"
 SHOW_FEATURE_COUNT = 20 # -1 means all features

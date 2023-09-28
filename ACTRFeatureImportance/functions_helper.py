@@ -13,6 +13,7 @@ import numpy as np
 
 # SCRIPTS
 import parameters
+import functions_helper
 
 # FUNCTIONS
 def get_percent(probability):
@@ -58,7 +59,7 @@ def getOutputName():
         os.makedirs(output_folder_path)
 
     # Return the desired output name
-    return os.path.join(output_folder_path, f"{parameters.OUTPUT_NAME}_{parameters.DATASET['name']}.html")
+    return os.path.join(output_folder_path, f"{functions_helper.getOutputName()}_{parameters.DATASET['name']}.html")
 
 def plotFeatures(df_scores, df_col):
     
@@ -88,7 +89,7 @@ def plotFeatures(df_scores, df_col):
                 y=feature_score['feature'][0:(parameters.SHOW_FEATURE_COUNT)],
                 orientation='h'))
 
-    fig.update_layout(title=f"Top {parameters.SHOW_FEATURE_COUNT} Features",
+    fig.update_layout(title=f"Top {parameters.SHOW_FEATURE_COUNT} Features in `{functions_helper.getOutputName()}`",
                     height=1200,
                     showlegend=False,
                     )
