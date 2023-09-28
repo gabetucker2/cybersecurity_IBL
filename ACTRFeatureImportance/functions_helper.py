@@ -50,7 +50,7 @@ def getAnalysisInputs():
 
     return X_train, X_test, y_train, y_test, model_performance, feature_names
 
-def getOutputName():
+def getOutputDir():
     # Define the full path for the output folder
     output_folder_path = os.path.join(os.getcwd(), parameters.OUTPUT_FOLDER)
 
@@ -59,7 +59,11 @@ def getOutputName():
         os.makedirs(output_folder_path)
 
     # Return the desired output name
-    return os.path.join(output_folder_path, f"{functions_helper.getOutputName()}_{parameters.DATASET['name']}.html")
+    return os.path.join(output_folder_path, getOutputName() + ".html")    
+
+def getOutputName():
+    # Return the desired output name
+    return f"{parameters.ANALYSIS_FUNCTION.__name__}_{parameters.DATASET['name']}"
 
 def plotFeatures(df_scores, df_col):
     
@@ -95,4 +99,4 @@ def plotFeatures(df_scores, df_col):
                     )
     
     # Concatenate to form the absolute path to save the plot
-    pyo.plot(fig, filename=getOutputName())
+    pyo.plot(fig, filename=getOutputDir())
