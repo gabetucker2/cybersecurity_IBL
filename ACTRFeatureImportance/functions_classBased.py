@@ -1,17 +1,7 @@
 # LIBRARIES
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib
-import os
-from sklearn.feature_selection import SelectKBest, chi2
-import plotly.offline as pyo
-import time
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import label_binarize
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.feature_selection import SelectKBest, chi2, f_classif
 
 # SCRIPTS
 import parameters
@@ -27,7 +17,13 @@ def classBased_selectKBest():
     target_class_name = parameters.DATASET["binary_target"]
     y = (y == target_class_name).astype(int)
 
-    best_features = SelectKBest(score_func=chi2, k='all')
+    # Check if data has negative values to decide on the scoring function
+    if (X < 0).any().any():
+        score_func = f_classif
+    else:
+        score_func = chi2
+
+    best_features = SelectKBest(score_func=score_func, k='all')
     fit = best_features.fit(X, y)
 
     df_scores = pd.DataFrame(fit.scores_)

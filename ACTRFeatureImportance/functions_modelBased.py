@@ -1,40 +1,12 @@
 # LIBRARIES
-import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib
-import os
-from sklearn.feature_selection import SelectKBest, chi2
-import plotly.offline as pyo
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import StandardScaler
 import time
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 
 # SCRIPTS
-import parameters
 import functions_preprocessing
 
-def modelBased_selectKBest():
-    df = functions_preprocessing.load_data()
-    df = functions_preprocessing.numeric_preprocessing(df)
-    df = functions_preprocessing.categorical_preprocessing(df)
-
-    best_features = SelectKBest(score_func=chi2, k='all')
-    X = df.iloc[:,4:-2]
-    y = df.iloc[:,-1]
-    fit = best_features.fit(X, y)
-
-    df_scores = pd.DataFrame(fit.scores_)
-    df_col = pd.DataFrame(X.columns)
-
-    return df_scores, df_col
-    
 def modelBased_randomForest():
     df = functions_preprocessing.load_data()
     X_train, X_test, y_train, y_test = functions_preprocessing.split_data(df)

@@ -4,6 +4,7 @@ import pyactup
 # SCRIPTS
 import datasets
 import functions_decode
+import functions_univariate
 import functions_modelBased
 import functions_classBased
 
@@ -29,7 +30,8 @@ READ_TEST_TIME = 0
 # FEATURE IMPORTANCE
 RUN_FEATURE_IMPORTANCE = True
 
-ANALYSIS_FUNCTION = functions_modelBased.modelBased_selectKBest
+# FROM functions_univariate, functions_modelBased, or functions_classBased
+ANALYSIS_FUNCTION = functions_univariate.univariate_selectKBest
 
 OUTPUT_FOLDER = "graphs"
 SHOW_FEATURE_COUNT = 20 # -1 means all features
