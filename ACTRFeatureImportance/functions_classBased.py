@@ -15,39 +15,18 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 
 # SCRIPTS
 import parameters
+import functions_preprocessing
 
 def classBased_selectKBest():
+    df = functions_preprocessing.load_data()
+    df = functions_preprocessing.numeric_preprocessing(df)
+    df = functions_preprocessing.categorical_preprocessing(df)
 
-    # Load data
-    df = parameters.DATASET["combined_inputs"]
-
-    # Numeric preprocessing
-    df_numeric = df.select_dtypes(include=[np.number])
-    for feature in df_numeric.columns:
-        if df_numeric[feature].max() > 10 * df_numeric[feature].median() and df_numeric[feature].max() > 10:
-            df[feature] = np.where(df[feature] < df[feature].quantile(0.95), df[feature], df[feature].quantile(0.95))
-
-    df_numeric = df.select_dtypes(include=[np.number])
-    for feature in df_numeric.columns:
-        if df_numeric[feature].nunique() > 50:
-            if df_numeric[feature].min() == 0:
-                df[feature] = np.log(df[feature] + 1)
-            else:
-                df[feature] = np.log(df[feature])
-
-    # Categorical preprocessing
-    df_cat = df.select_dtypes(exclude=[np.number])
-    for feature in df_cat.columns:
-        if df_cat[feature].nunique() > 6:
-            df[feature] = np.where(df[feature].isin(df[feature].value_counts().head().index), df[feature], '-')
-
-    # Adjust labels for class-based feature selection if target_class is provided
     X = df.iloc[:, 4:-2]
     y = df.iloc[:, -1]
     target_class_name = parameters.DATASET["binary_target"]
-    y = (y == target_class_name).astype(int)  # Convert y labels to binary based on target class
+    y = (y == target_class_name).astype(int)
 
-    # Feature Selection
     best_features = SelectKBest(score_func=chi2, k='all')
     fit = best_features.fit(X, y)
 
