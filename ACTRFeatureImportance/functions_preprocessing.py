@@ -1,20 +1,11 @@
 # LIBRARIES
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
 import random
-import matplotlib
-import os
-from sklearn.feature_selection import SelectKBest, chi2
-import plotly.offline as pyo
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, label_binarize
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
-import time
+
 
 # SCRIPTS
 import parameters
@@ -63,7 +54,9 @@ def one_hot_encode_and_scale(X_train, X_test, df):
     )
 
     X_train = ct.fit_transform(X_train).toarray()
-    X_test = ct.transform(X_test).toarray()
+    
+    if X_test is not None:  # only transform if X_test is provided
+        X_test = ct.transform(X_test).toarray()
 
     # Since the encoder might ignore some categories in the test set, we should retrieve feature names from the encoder
     # to ensure consistency with the transformed columns.
@@ -71,7 +64,9 @@ def one_hot_encode_and_scale(X_train, X_test, df):
     
     sc = StandardScaler()
     X_train[:, 18:] = sc.fit_transform(X_train[:, 18:])
-    X_test[:, 18:] = sc.transform(X_test[:, 18:])
+    
+    if X_test is not None:  # only scale if X_test is provided
+        X_test[:, 18:] = sc.transform(X_test[:, 18:])
 
     return X_train, X_test, feature_names
 

@@ -31,7 +31,7 @@ READ_TEST_TIME = 0
 RUN_FEATURE_IMPORTANCE = True
 
 # FROM functions_univariate, functions_modelBased, or functions_classBased
-ANALYSIS_FUNCTION = functions_univariate.univariate_selectKBest
+ANALYSIS_FUNCTION = functions_modelBased.modelBased_randomForest
 
 OUTPUT_FOLDER = "graphs"
 SHOW_FEATURE_COUNT = 20 # -1 means all features
