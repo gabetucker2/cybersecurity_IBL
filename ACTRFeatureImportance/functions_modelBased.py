@@ -53,8 +53,27 @@ def modelBased_randomForest():
     f1s = f1_score(y_test, y_predictions, average='weighted')
     model_performance.loc['Random Forest'] = [accuracy, recall, precision, f1s, end_train-start, end_predict-end_train, end_predict-start]
 
+    # Group the importances by original feature name
     feat_importances = pd.Series(model.feature_importances_, index=feature_names)
-    df_scores = pd.DataFrame(feat_importances.values)
-    df_col = pd.DataFrame(feat_importances.index)
+    aggregated_importances = {}
+
+    # This function will return the original feature name given the one-hot encoded name
+    def get_original_feature_name(encoded_name):
+        if 'encoder__' in encoded_name:
+            return encoded_name.split('__')[1].split('_')[0]
+        elif 'remainder__' in encoded_name:
+            return encoded_name.replace('remainder__', '')
+        return encoded_name
+
+    for label, importance in feat_importances.items():
+        original_name = get_original_feature_name(label)
+        
+        if original_name in aggregated_importances:
+            aggregated_importances[original_name] += importance
+        else:
+            aggregated_importances[original_name] = importance
+
+    df_scores = pd.DataFrame(list(aggregated_importances.values()), columns=['Importance'])
+    df_col = pd.DataFrame(list(aggregated_importances.keys()), columns=['Feature'])
 
     return df_scores, df_col
