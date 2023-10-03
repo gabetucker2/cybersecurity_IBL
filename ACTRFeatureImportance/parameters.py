@@ -29,7 +29,7 @@ READ_TEST_TIME = 0
 # FEATURE IMPORTANCE
 RUN_FEATURE_IMPORTANCE = True
 
-ANALYSIS_FUNCTION = functions_modelBased.modelBased_randomForest
+ANALYSIS_FUNCTION = functions_modelBased.modelBased_selectKBest
 
 OUTPUT_FOLDER = "graphs"
 SHOW_FEATURE_COUNT = 20 # -1 means all features
